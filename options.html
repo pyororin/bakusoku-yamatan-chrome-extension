@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>やまたん爆速予約 - 設定</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>やまたん爆速予約 - 設定</h1>
+      <p>予約時に自動入力される情報を設定してください。</p>
+    </header>
+
+    <main>
+      <div class="form-group">
+        <label for="q1">Q1: お客様みなさまのお名前・年齢・性別</label>
+        <textarea id="q1" rows="4" placeholder="例: 山田 太郎 (35歳男性)、山田 花子 (32歳女性)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="q2">Q2: 前日のご宿泊地</label>
+        <textarea id="q2" rows="2" placeholder="例: 自宅（神奈川県）"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="q3">Q3: 翌日歩くルート・目的地</label>
+        <textarea id="q3" rows="2" placeholder="例: Aコース → B山 → Cバス停"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="q4">Q4: お食事について特別なご要望</label>
+        <textarea id="q4" rows="3" placeholder="例: ヴィーガンメニュー希望、甲殻類アレルギーあり"></textarea>
+      </div>
+
+      <div class="form-group-checkbox">
+        <label for="finalize">
+          <input type="checkbox" id="finalize" name="finalize">
+          <span>最終確定まで実行する (オフにするとデバッグモード)</span>
+        </label>
+        <p class="description">このチェックを外すと、最終確認ページの「同意して予約する」ボタンはクリックされません。デバッグやテストにご利用ください。</p>
+      </div>
+
+      <div class="actions">
+        <button id="save" class="button-primary">保存</button>
+        <div id="status"></div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="preset-actions">
+        <h3>設定の管理</h3>
+        <button id="export-settings" class="button-secondary">エクスポート</button>
+        <label class="button-secondary" for="import-settings-input">
+          インポート
+          <input type="file" id="import-settings-input" accept=".json" style="display: none;">
+        </label>
+        <button id="clear-settings" class="button-danger">全設定をクリア</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

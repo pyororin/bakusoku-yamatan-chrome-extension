@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "やまたん爆速予約",
+  "version": "1.0.0",
+  "description": "山小屋「やまたん」の予約プロセスを自動化し、予約体験を劇的に向上させます。",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.example-yamatan.jp/*"
+  ],
+  "action": {
+    "default_title": "設定",
+    "default_popup": "options.html"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://*.example-yamatan.jp/*"],
+      "js": ["utils.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["https://*.example-yamatan.jp/*"]
+    }
+  ],
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  }
+}
