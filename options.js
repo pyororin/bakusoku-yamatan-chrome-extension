@@ -6,6 +6,8 @@ const saveOptions = () => {
   const q2 = document.getElementById('q2').value;
   const q3 = document.getElementById('q3').value;
   const q4 = document.getElementById('q4').value;
+  const maleGuests = parseInt(document.getElementById('male-guests').value, 10);
+  const femaleGuests = parseInt(document.getElementById('female-guests').value, 10);
   const finalizeBooking = document.getElementById('finalize').checked;
 
   if (!q1 || !q2 || !q3) {
@@ -21,7 +23,7 @@ const saveOptions = () => {
 
   chrome.storage.sync.set(
     {
-      yamatanSettings: { q1, q2, q3, q4, finalizeBooking }
+      yamatanSettings: { q1, q2, q3, q4, maleGuests, femaleGuests, finalizeBooking }
     },
     () => {
       // Update status to let user know options were saved.
@@ -41,13 +43,19 @@ const saveOptions = () => {
  * stored in chrome.storage.
  */
 const restoreOptions = () => {
-  const defaultSettings = { q1: '', q2: '', q3: '', q4: '', finalizeBooking: true };
+  const defaultSettings = {
+    q1: '', q2: '', q3: '', q4: '',
+    maleGuests: 1, femaleGuests: 0,
+    finalizeBooking: true
+  };
   chrome.storage.sync.get({ yamatanSettings: defaultSettings }, (items) => {
-    const settings = items.yamatanSettings;
+    const settings = { ...defaultSettings, ...items.yamatanSettings };
     document.getElementById('q1').value = settings.q1;
     document.getElementById('q2').value = settings.q2;
     document.getElementById('q3').value = settings.q3;
     document.getElementById('q4').value = settings.q4;
+    document.getElementById('male-guests').value = settings.maleGuests;
+    document.getElementById('female-guests').value = settings.femaleGuests;
     document.getElementById('finalize').checked = settings.finalizeBooking;
   });
 };
@@ -87,7 +95,8 @@ const importSettings = (event) => {
         document.getElementById('q2').value = settings.q2 || '';
         document.getElementById('q3').value = settings.q3 || '';
         document.getElementById('q4').value = settings.q4 || '';
-        // Handle finalizeBooking with a default if it's missing from the imported file
+        document.getElementById('male-guests').value = settings.maleGuests || 1;
+        document.getElementById('female-guests').value = settings.femaleGuests || 0;
         document.getElementById('finalize').checked = typeof settings.finalizeBooking === 'boolean' ? settings.finalizeBooking : true;
         saveOptions(); // Save imported settings directly
       } else {
@@ -117,10 +126,11 @@ const clearSettings = () => {
         document.getElementById('q2').value = '';
         document.getElementById('q3').value = '';
         document.getElementById('q4').value = '';
+        document.getElementById('male-guests').value = 1;
+        document.getElementById('female-guests').value = 0;
         document.getElementById('finalize').checked = true; // Reset to default
 
-        // The saveOptions function will clear storage effectively
-        saveOptions();
+        saveOptions(); // This will save the cleared/default values
 
         const status = document.getElementById('status');
         status.textContent = '全設定をクリアしました。';

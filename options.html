@@ -34,6 +34,22 @@
         <textarea id="q4" rows="3" placeholder="例: ヴィーガンメニュー希望、甲殻類アレルギーあり"></textarea>
       </div>
 
+      <div class="form-group">
+        <label>予約人数</label>
+        <div class="guest-count-container">
+          <div class="guest-count-field">
+            <label for="male-guests">男性</label>
+            <input type="number" id="male-guests" min="0" max="9" value="1">
+            <span>名</span>
+          </div>
+          <div class="guest-count-field">
+            <label for="female-guests">女性</label>
+            <input type="number" id="female-guests" min="0" max="9" value="0">
+            <span>名</span>
+          </div>
+        </div>
+      </div>
+
       <div class="form-group-checkbox">
         <label for="finalize">
           <input type="checkbox" id="finalize" name="finalize">

@@ -138,7 +138,9 @@ function loadSettings() {
       q2: '',
       q3: '',
       q4: '',
-      finalizeBooking: true // Default to true to not break existing flow
+      maleGuests: 1,
+      femaleGuests: 0,
+      finalizeBooking: true
     };
     chrome.storage.sync.get({ yamatanSettings: defaultSettings }, (items) => {
       // Ensure the returned settings object has all keys from the default

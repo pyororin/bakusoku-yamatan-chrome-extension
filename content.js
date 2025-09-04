@@ -46,7 +46,7 @@ function isLoggedIn() {
 /**
  * Automates the booking dialog: plan selection, guest count.
  */
-async function handleDialogFlow() {
+async function handleDialogFlow(settings) {
   console.info('[Yamatan] Starting dialog flow...');
   const form = await waitForSelector('div[role="dialog"][data-state="open"] form', { timeout: 8000 });
 
@@ -62,17 +62,29 @@ async function handleDialogFlow() {
     console.warn('[Yamatan] Plan selection dropdown not found.');
   }
 
-  // 2. Add 4 adult males
-  const plusButtonId = 'ReservationToPlan\\[0\\]\\.guests\\[0\\]\\.maleGuestNum-plus';
-  const plusButton = form.querySelector(`#${plusButtonId}`);
-  if (!plusButton) throw new Error('Guest increment button not found.');
+  // 2. Add guests based on settings
+  const malePlusButtonId = 'ReservationToPlan\\[0\\]\\.guests\\[0\\]\\.maleGuestNum-plus';
+  const femalePlusButtonId = 'ReservationToPlan\\[0\\]\\.guests\\[0\\]\\.femaleGuestNum-plus'; // Assumed ID
 
-  console.info('[Yamatan] Adding 4 guests...');
-  for (let i = 0; i < 4; i++) {
-    await waitForEnabled(plusButton, 3000);
-    plusButton.click();
-    console.info(`[Yamatan] Guest ${i + 1} added.`);
-    await sleep(90 + Math.random() * 60);
+  const malePlusButton = form.querySelector(`#${malePlusButtonId}`);
+  const femalePlusButton = form.querySelector(`#${femalePlusButtonId}`);
+
+  if (malePlusButton && settings.maleGuests > 0) {
+    console.info(`[Yamatan] Adding ${settings.maleGuests} male guests...`);
+    for (let i = 0; i < settings.maleGuests; i++) {
+      await waitForEnabled(malePlusButton, 3000);
+      malePlusButton.click();
+      await sleep(90 + Math.random() * 60);
+    }
+  }
+
+  if (femalePlusButton && settings.femaleGuests > 0) {
+    console.info(`[Yamatan] Adding ${settings.femaleGuests} female guests...`);
+    for (let i = 0; i < settings.femaleGuests; i++) {
+      await waitForEnabled(femalePlusButton, 3000);
+      femalePlusButton.click();
+      await sleep(90 + Math.random() * 60);
+    }
   }
 
   // 3. Submit to confirmation page
@@ -159,11 +171,13 @@ async function onInstantReserveClick(ev) {
     harness?.querySelector('a.fc-event')?.click();
 
     await retry(async () => {
-        await handleDialogFlow();
+        await handleDialogFlow(settings);
         await handleConfirmPage(settings);
     });
 
-    showToast('予約リクエストが正常に送信されました！', 5000, 'success');
+    if (settings.finalizeBooking) {
+      showToast('予約リクエストが正常に送信されました！', 5000, 'success');
+    }
   } catch (e) {
     console.error('[Yamatan] Automation failed:', e);
     showToast(`自動処理に失敗: ${e.message}`, 5000, 'error');
