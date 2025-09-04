@@ -17,8 +17,10 @@ const scrapeFunctions = {
     return { isProfileComplete, missingFields };
   },
   checkCard: () => {
-    const cardInfo = document.querySelector('.LabelValueList_value__oFMk5');
-    return { hasCard: !!cardInfo && cardInfo.textContent.includes('****') };
+    // Use querySelectorAll and .some() to make the check robust against element order changes.
+    const cardValues = Array.from(document.querySelectorAll('.LabelValueList_value__oFMk5'));
+    const hasCardNumber = cardValues.some(el => el.textContent.includes('****'));
+    return { hasCard: hasCardNumber };
   }
 };
 
