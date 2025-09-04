@@ -32,8 +32,15 @@ async function retry(fn, retries = RETRY_COUNT, delay = RETRY_DELAY) {
  * @returns {boolean} True if logged in, false otherwise.
  */
 function isLoggedIn() {
-  const logoutLink = document.querySelector('li.SideNavMenuHut_nav__item__Pe6Js a');
-  return logoutLink?.textContent?.trim() === 'ログアウト';
+  const allLinks = document.querySelectorAll('a');
+  for (const link of allLinks) {
+    if (link.textContent?.trim() === 'ログアウト') {
+      // Found a logout link, so user is logged in.
+      return true;
+    }
+  }
+  // No logout link was found anywhere on the page.
+  return false;
 }
 
 /**
@@ -216,18 +223,19 @@ function tryInjectInstantButtons() {
 
       Object.assign(btn.style, {
         position: 'absolute',
-        top: '1px',
-        right: '1px',
+        top: '50%',
+        right: '5px',
+        transform: 'translateY(-50%)',
         zIndex: '10',
-        padding: '1px 4px',
-        backgroundColor: 'rgba(231, 76, 60, 0.9)',
+        padding: '3px 8px',
+        backgroundColor: 'rgba(142, 68, 173, 0.95)', // Purple
         color: 'white',
-        borderRadius: '3px',
-        fontSize: '10px',
+        borderRadius: '4px',
+        fontSize: '12px',
         fontWeight: 'bold',
         textDecoration: 'none',
         cursor: 'pointer',
-        border: '1px solid rgba(255, 255, 255, 0.5)'
+        border: '1px solid rgba(255, 255, 255, 0.6)'
       });
 
       btn.addEventListener('click', onInstantReserveClick);
