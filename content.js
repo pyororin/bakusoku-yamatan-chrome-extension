@@ -223,18 +223,19 @@ function tryInjectInstantButtons() {
 
       Object.assign(btn.style, {
         position: 'absolute',
-        top: '1px',
-        right: '1px',
+        top: '50%',
+        right: '5px',
+        transform: 'translateY(-50%)',
         zIndex: '10',
-        padding: '1px 4px',
-        backgroundColor: 'rgba(231, 76, 60, 0.9)',
+        padding: '3px 8px',
+        backgroundColor: 'rgba(142, 68, 173, 0.95)', // Purple
         color: 'white',
-        borderRadius: '3px',
-        fontSize: '10px',
+        borderRadius: '4px',
+        fontSize: '12px',
         fontWeight: 'bold',
         textDecoration: 'none',
         cursor: 'pointer',
-        border: '1px solid rgba(255, 255, 255, 0.5)'
+        border: '1px solid rgba(255, 255, 255, 0.6)'
       });
 
       btn.addEventListener('click', onInstantReserveClick);
