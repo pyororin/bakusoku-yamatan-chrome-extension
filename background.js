@@ -17,10 +17,45 @@ const scrapeFunctions = {
     return { isProfileComplete, missingFields };
   },
   checkCard: () => {
-    // Use querySelectorAll and .some() to make the check robust against element order changes.
-    const cardValues = Array.from(document.querySelectorAll('.LabelValueList_value__oFMk5'));
-    const hasCardNumber = cardValues.some(el => el.textContent.includes('****'));
-    return { hasCard: hasCardNumber };
+    // This function is injected into the target page, so it must be self-contained.
+    // It includes its own waitForSelector to handle dynamically loaded content.
+    return (async () => {
+        const waitForSelector = (selector, { root = document, timeout = 3000 } = {}) => {
+            return new Promise((resolve, reject) => {
+                const el = root.querySelector(selector);
+                if (el) {
+                    resolve(el);
+                    return;
+                }
+                const observer = new MutationObserver(() => {
+                    const el = root.querySelector(selector);
+                    if (el) {
+                        observer.disconnect();
+                        clearTimeout(timer);
+                        resolve(el);
+                    }
+                });
+                observer.observe(root, { childList: true, subtree: true });
+                const timer = setTimeout(() => {
+                    observer.disconnect();
+                    reject(new Error(`waitForSelector: timed out for selector "${selector}"`));
+                }, timeout);
+            });
+        };
+
+        try {
+            // Wait for the element to appear in the DOM before checking
+            await waitForSelector('.LabelValueList_value__oFMk5');
+
+            const cardValues = Array.from(document.querySelectorAll('.LabelValueList_value__oFMk5'));
+            const hasCardNumber = cardValues.some(el => el.textContent.includes('****'));
+            return { hasCard: hasCardNumber };
+        } catch (e) {
+            // If waitForSelector times out, it means no card info was found.
+            console.warn(`[Yamatan] Card check failed: ${e.message}`);
+            return { hasCard: false };
+        }
+    })();
   }
 };
 
