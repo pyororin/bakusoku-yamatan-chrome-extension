@@ -163,7 +163,9 @@ async function onInstantReserveClick(ev) {
         await handleConfirmPage(settings);
     });
 
-    showToast('予約リクエストが正常に送信されました！', 5000, 'success');
+    if (settings.finalizeBooking) {
+      showToast('予約リクエストが正常に送信されました！', 5000, 'success');
+    }
   } catch (e) {
     console.error('[Yamatan] Automation failed:', e);
     showToast(`自動処理に失敗: ${e.message}`, 5000, 'error');
