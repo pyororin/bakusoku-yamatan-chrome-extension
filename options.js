@@ -143,8 +143,55 @@ const clearSettings = () => {
 };
 
 
+/**
+ * Handles the prerequisite check button click.
+ */
+const handlePrerequisiteCheck = () => {
+  const checkButton = document.getElementById('check-prerequisites');
+  const resultsArea = document.getElementById('prerequisites-results');
+
+  // Disable button and show checking status
+  checkButton.disabled = true;
+  checkButton.textContent = 'チェック中...';
+  resultsArea.style.display = 'block';
+  resultsArea.innerHTML = `<p class="result-checking">マイページを確認しています...</p>`;
+
+  chrome.runtime.sendMessage({ action: 'checkPrerequisites' }, (response) => {
+    // Re-enable button
+    checkButton.disabled = false;
+    checkButton.textContent = '登録状況を再チェック';
+
+    if (response && response.success) {
+      const { profile, card } = response;
+      let resultsHTML = '';
+
+      // Profile check result
+      if (profile.isProfileComplete) {
+        resultsHTML += `<p><span class="result-icon result-ok">✔</span> プロフィール: 必須項目はすべて登録済みです。</p>`;
+      } else {
+        resultsHTML += `<p><span class="result-icon result-error">✖</span> プロフィール: 未入力の項目があります。(不足項目: ${profile.missingFields.join(', ') || '不明'})</p>`;
+      }
+
+      // Card check result
+      if (card.hasCard) {
+        resultsHTML += `<p><span class="result-icon result-ok">✔</span> クレジットカード: 登録済みです。</p>`;
+      } else {
+        resultsHTML += `<p><span class="result-icon result-error">✖</span> クレジットカード: 未登録です。</p>`;
+      }
+      resultsArea.innerHTML = resultsHTML;
+
+    } else {
+      // Handle errors, e.g., if the user is not logged in
+      const errorMessage = response?.error || '不明なエラーが発生しました。やまたんのサイトにログインしているか確認してください。';
+      resultsArea.innerHTML = `<p class="result-error">✖ チェックに失敗しました: ${errorMessage}</p>`;
+    }
+  });
+};
+
+
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('save').addEventListener('click', saveOptions);
 document.getElementById('export-settings').addEventListener('click', exportSettings);
 document.getElementById('import-settings-input').addEventListener('change', importSettings);
 document.getElementById('clear-settings').addEventListener('click', clearSettings);
+document.getElementById('check-prerequisites').addEventListener('click', handlePrerequisiteCheck);
