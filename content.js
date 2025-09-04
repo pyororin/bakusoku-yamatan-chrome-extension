@@ -32,8 +32,15 @@ async function retry(fn, retries = RETRY_COUNT, delay = RETRY_DELAY) {
  * @returns {boolean} True if logged in, false otherwise.
  */
 function isLoggedIn() {
-  const logoutLink = document.querySelector('li.SideNavMenuHut_nav__item__Pe6Js a');
-  return logoutLink?.textContent?.trim() === 'ログアウト';
+  const allLinks = document.querySelectorAll('a');
+  for (const link of allLinks) {
+    if (link.textContent?.trim() === 'ログアウト') {
+      // Found a logout link, so user is logged in.
+      return true;
+    }
+  }
+  // No logout link was found anywhere on the page.
+  return false;
 }
 
 /**
