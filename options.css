@@ -191,3 +191,64 @@ footer {
 .button-danger:active, .button-secondary:active {
   transform: translateY(1px);
 }
+
+/* Styles for prerequisite checker */
+.prerequisites-check {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.prerequisites-check h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+}
+
+.prerequisites-check p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0 0 1rem 0;
+}
+
+.results-area {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: none; /* Hidden by default */
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+}
+
+.results-area p {
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.results-area p:last-child {
+  margin-bottom: 0;
+}
+
+.result-icon {
+  margin-right: 0.5rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.result-ok {
+  color: #27ae60;
+}
+
+.result-error {
+  color: #e74c3c;
+}
+
+.result-checking {
+  color: #3498db;
+}

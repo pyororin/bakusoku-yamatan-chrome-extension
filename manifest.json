@@ -5,11 +5,15 @@
   "description": "山小屋「やまたん」の予約プロセスを自動化し、予約体験を劇的に向上させます。",
   "permissions": [
     "storage",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "https://www.yamatan.net/*"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "設定",
     "default_popup": "options.html"
