@@ -193,9 +193,13 @@ function tryInjectInstantButtons() {
 
       btn.addEventListener('click', onInstantReserveClick);
 
-      // This is the less-intrusive method, as discussed.
-      // It adds the button as a sibling to the event harness.
-      harness.insertAdjacentElement('afterend', btn);
+      // Final attempt: Modify the harness itself to be a flex container
+      // and append the button inside it. This is safer than modifying
+      // outside the harness or inside the anchor.
+      harness.style.display = 'flex';
+      harness.style.alignItems = 'center';
+      harness.style.justifyContent = 'space-between';
+      harness.appendChild(btn);
     }
   });
 }
