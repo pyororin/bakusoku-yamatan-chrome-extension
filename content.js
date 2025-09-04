@@ -171,14 +171,43 @@ async function onInstantReserveClick(ev) {
  * Finds available calendar slots and injects the "Instant Book" button.
  */
 function tryInjectInstantButtons() {
-  if (!isLoggedIn()) return;
+  console.log('[Yamatan Debug] Running tryInjectInstantButtons...');
 
-  document.querySelectorAll('.fc-daygrid-event-harness').forEach(harness => {
-    if (harness.dataset.yamatanButtonInjected === 'true') return;
-    harness.dataset.yamatanButtonInjected = 'true';
+  if (!isLoggedIn()) {
+    console.log('[Yamatan Debug] Not logged in. Aborting.');
+    return;
+  }
+  console.log('[Yamatan Debug] User is logged in.');
+
+  const eventHarnesses = document.querySelectorAll('.fc-daygrid-event-harness');
+  console.log(`[Yamatan Debug] Found ${eventHarnesses.length} event harnesses.`);
+
+  if (eventHarnesses.length === 0) {
+    console.log('[Yamatan Debug] No event harnesses found on the page.');
+  }
+
+  eventHarnesses.forEach((harness, index) => {
+    const logPrefix = `[Yamatan Debug] Harness #${index}:`;
+
+    if (harness.querySelector('.yamatan-instant-reserve-btn')) {
+      console.log(`${logPrefix} Button already exists. Skipping.`);
+      return;
+    }
 
     const titleEl = harness.querySelector('.fc-event-title.fc-sticky');
-    if (titleEl?.textContent?.trim().startsWith('○/')) {
+    if (!titleEl) {
+      console.log(`${logPrefix} No title element found. Skipping.`);
+      return;
+    }
+
+    const titleText = titleEl.textContent?.trim() ?? '';
+    console.log(`${logPrefix} Found title text: "${titleText}"`);
+
+    if (titleText.startsWith('○/')) {
+      console.log(`${logPrefix} Title matches "○/". Injecting button.`);
+
+      harness.style.position = 'relative';
+
       const btn = document.createElement('a');
       btn.textContent = '即予約';
       btn.href = '#';
@@ -186,22 +215,30 @@ function tryInjectInstantButtons() {
       btn.dataset.yamatanInstant = '1';
 
       Object.assign(btn.style, {
-        marginLeft: '8px', padding: '2px 8px', backgroundColor: '#e74c3c',
-        color: 'white', borderRadius: '4px', fontWeight: 'bold',
-        textDecoration: 'none', cursor: 'pointer', display: 'inline-block'
+        position: 'absolute',
+        top: '1px',
+        right: '1px',
+        zIndex: '10',
+        padding: '1px 4px',
+        backgroundColor: 'rgba(231, 76, 60, 0.9)',
+        color: 'white',
+        borderRadius: '3px',
+        fontSize: '10px',
+        fontWeight: 'bold',
+        textDecoration: 'none',
+        cursor: 'pointer',
+        border: '1px solid rgba(255, 255, 255, 0.5)'
       });
 
       btn.addEventListener('click', onInstantReserveClick);
 
-      // Final attempt: Modify the harness itself to be a flex container
-      // and append the button inside it. This is safer than modifying
-      // outside the harness or inside the anchor.
-      harness.style.display = 'flex';
-      harness.style.alignItems = 'center';
-      harness.style.justifyContent = 'space-between';
       harness.appendChild(btn);
+      console.log(`${logPrefix} Button injected successfully.`);
+    } else {
+      console.log(`${logPrefix} Title does not match. No action taken.`);
     }
   });
+  console.log('[Yamatan Debug] Finished tryInjectInstantButtons run.');
 }
 
 // == MAIN EXECUTION & OBSERVER ==
