@@ -8,7 +8,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://*.example-yamatan.jp/*"
+    "https://www.yamatan.net/*"
   ],
   "action": {
     "default_title": "設定",
@@ -17,7 +17,7 @@
   "options_page": "options.html",
   "content_scripts": [
     {
-      "matches": ["https://*.example-yamatan.jp/*"],
+      "matches": ["https://www.yamatan.net/*"],
       "js": ["utils.js", "content.js"],
       "run_at": "document_idle"
     }

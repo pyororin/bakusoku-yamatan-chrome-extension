@@ -193,12 +193,9 @@ function tryInjectInstantButtons() {
 
       btn.addEventListener('click', onInstantReserveClick);
 
-      const anchor = harness.querySelector('a.fc-event');
-      if (anchor) {
-          anchor.style.display = 'inline-flex';
-          anchor.style.alignItems = 'center';
-          anchor.insertAdjacentElement('beforeend', btn);
-      }
+      // This is the less-intrusive method, as discussed.
+      // It adds the button as a sibling to the event harness.
+      harness.insertAdjacentElement('afterend', btn);
     }
   });
 }
