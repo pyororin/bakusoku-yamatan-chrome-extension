@@ -224,8 +224,9 @@ function tryInjectInstantButtons() {
     const titleText = titleEl.textContent?.trim() ?? '';
     console.log(`${logPrefix} Found title text: "${titleText}"`);
 
-    if (titleText.startsWith('○/')) {
-      console.log(`${logPrefix} Title matches "○/". Injecting button.`);
+    // Inject button if the title text exists and does not start with '×/'
+    if (titleText && !titleText.startsWith('×/')) {
+      console.log(`${logPrefix} Title is valid for booking. Injecting button.`);
 
       harness.style.position = 'relative';
 
